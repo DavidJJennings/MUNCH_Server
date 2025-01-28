@@ -1,0 +1,108 @@
+{
+  "paths": {
+    "/users": {
+      "post": {
+        "description": "Registers a new user",
+        "operationId": "registerUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered",
+            "headers": {
+              "location": {
+                "description": "The URL of the newly created user",
+                "schema": {
+                  "type": "string",
+                  "example": "/users/1234"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegisterUserRequest": {
+        "type": "object",
+        "properties": {
+          "firstName": {"type": "string"},
+          "lastName": {"type": "string"},
+          "email": {"type": "string"},
+          "password": {"type": "string"}
+        },
+        "required": ["firstName", "lastName", "email", "password"]
+      },
+      "RegisterUserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier that has been assigned to the user"
+          },
+          "message": {
+            "type": "string",
+            "description": "A message declaring the request was successful."
+          }
+        },
+        "required": ["id"]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The reference code of the error",
+            "example": "400" },
+          "status": {
+            "type": "string",
+             "description": "The short description of the error",
+             "example": "Bad Request"
+            },
+          "message": {
+            "type": "string",
+            "description": "Message describing details of the error",
+            "example": "Email must be provided"
+          }
+        }
+      }
+    }
+  }
+}
