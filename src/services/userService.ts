@@ -1,3 +1,4 @@
+import pool from "../config/database";
 import { TypedRequestBody } from "../shared/interfaces";
 
 interface IRegisterReq {
@@ -8,8 +9,10 @@ interface IRegisterReq {
 }
 
 
-export const addUserToDatabase = ({firstName, lastName, email, password}: IRegisterReq): Promise<string> => {
-  return (
-    
-  )
-}
+// export const addUserToDatabase = ({firstName, lastName, email, password}: IRegisterReq): Promise<number> => {
+  // Gunna add in after check service created
+// }
+
+// export const doesUserExist = async (email: string) => {
+//   [user] = pool.query
+// }

@@ -44,6 +44,17 @@
               }
             }
           },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+
+          },
           "500": {
             "description": "Internal Server Error",
             "content": {
@@ -74,7 +85,7 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string",
+            "type": "number",
             "description": "The unique identifier that has been assigned to the user"
           },
           "message": {
@@ -82,24 +93,22 @@
             "description": "A message declaring the request was successful."
           }
         },
-        "required": ["id"]
+        "required": ["id", "message"]
       },
       "ErrorResponse": {
         "type": "object",
         "properties": {
           "code": {
-            "type": "string",
-            "description": "The reference code of the error",
-            "example": "400" },
+            "type": "number",
+            "description": "The reference code of the error"
+          },
           "status": {
             "type": "string",
-             "description": "The short description of the error",
-             "example": "Bad Request"
+             "description": "The short description of the error"
             },
           "message": {
             "type": "string",
-            "description": "Message describing details of the error",
-            "example": "Email must be provided"
+            "description": "Message describing details of the error"
           }
         }
       }
