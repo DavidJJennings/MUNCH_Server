@@ -1,4 +1,4 @@
-import { RowDataPacket } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 import pool from "../config/database";
 import { TypedRequestBody } from "../shared/interfaces";
 import HttpError from "../classes/HttpError";
@@ -11,10 +11,17 @@ interface IRegisterReq {
   password: string,
 }
 
-
-// export const addUserToDatabase = ({firstName, lastName, email, password}: IRegisterReq): Promise<number> => {
-//   Gunna add in after check service created
-// }
+export const addUserToDatabase = async ({firstName, lastName, email, password}: IRegisterReq) => {
+  try {
+    const [result] = await pool.execute<ResultSetHeader>(
+      'INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)',
+      [firstName, lastName, email, password]
+    )
+    return result.insertId;
+  } catch(error) {
+    handleDatabaseError(error)
+  }
+}
 
 export const doesUserExist = async (email: string) => {
   try {
@@ -26,9 +33,6 @@ export const doesUserExist = async (email: string) => {
 
     return results.length > 0;
   } catch(error) {
-    if (error instanceof Error) {
-      handleDatabaseError(error);
-    }
-    throw new HttpError(500, "Error querying user from database")
+    handleDatabaseError(error);
   }
 }

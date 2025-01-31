@@ -28,18 +28,19 @@ export const registerUser = async (req: TypedRequestBody<IRegisterReq>, res: Typ
     if(userExists) {
       throw new HttpError(409, "Email already in use")
     }
-    // const hashedPassword = await bcrypt.hash(password, 10);
-    // const userId = await addUserToDatabase({
-    //   firstName,
-    //   lastName,
-    //   email,
-    //   password: hashedPassword,
-    // });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    const userId = await addUserToDatabase({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+    });
 
-    // res.status(201).location(`/user/${userId}`).json({
-    //   id: userId,
-    //   message: "User successfully registered."
-    // });
+    res.status(201).location(`/user/${userId}`).json({
+      id: userId,
+      message: "User successfully registered."
+    });
 
     logger.info("Successfully registered user: %s", email);
     
