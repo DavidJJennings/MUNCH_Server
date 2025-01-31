@@ -3,7 +3,8 @@ import { NextFunction } from 'express';
 import { TypedRequestBody, TypedResponseBody } from '../shared/interfaces';
 import bcrypt from "bcrypt";
 import { addUserToDatabase, doesUserExist } from '../services/userService';
-import pool from '../config/database';
+import logger from '../utils/logger';
+import HttpError from '../classes/HttpError';
 
 
 interface IRegisterReq {
@@ -23,18 +24,10 @@ export const registerUser = async (req: TypedRequestBody<IRegisterReq>, res: Typ
   const { firstName, lastName, password, email } = req.body;
 
   try {
-
-
-async function testDB() {
-  try {
-    const [rows] = await pool.query("SELECT 1");
-    console.log("MySQL Connection Successful:", rows);
-  } catch (error) {
-    console.error("MySQL Connection Failed:", error);
-  }
-}
-
-testDB();
+    const userExists = await doesUserExist(email);
+    if(userExists) {
+      throw new HttpError(409, "Email already in use")
+    }
     // const hashedPassword = await bcrypt.hash(password, 10);
     // const userId = await addUserToDatabase({
     //   firstName,
@@ -48,7 +41,7 @@ testDB();
     //   message: "User successfully registered."
     // });
 
-    // logger.info("Successfully registered user: %s", email);
+    logger.info("Successfully registered user: %s", email);
     
   } catch(error) {
     next(error);

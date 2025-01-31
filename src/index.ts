@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import userRoute from "./routes/userRoute"
 import * as OpenApiValidator from 'express-openapi-validator';
-import { logger } from "./utils/logger";
+import logger from "./utils/logger";
+import HttpError from "./classes/HttpError";
 
 dotenv.config();
 
@@ -30,14 +31,12 @@ app.use(
 
 app.use(`/${process.env.API_VERSION}/users`, userRoute);
 
-app.use((err, req, res, next) => {
-  const status = err.status || 500;
-  logger.error(`[${req.method}] ${req.url} - ${status}: ${err.message}`);
+app.use((err: HttpError, req, res, next) => {
+  logger.error(`[${req.method}] ${req.url} - ${err.sqlCode || err.code}: ${err.message}`);
   
-  res.status(status).json({
-    code: status,
-    status: status >= 500 ? "error" : "fail",
-    message: err.message,
+  res.status(err.code).json({
+    code: err.code,
+    message: err.code >= 500 ? "Something went wrong" : err.message,
   });
 });
 

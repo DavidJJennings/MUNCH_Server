@@ -1,12 +1,14 @@
 import { HttpErrorCodes } from "../enums/ErrorCodes";
 
 class HttpError extends Error {
-  public status: number;
+  public sqlCode?: string;
+  public code: number;
   
-  constructor(status: number, message?: string) {
-    super(message ?? HttpErrorCodes[status]);
+  constructor(code: number, sqlCode?: string, message?: string) {
+    super(message ?? HttpErrorCodes[code]);
 
-    this.status = status;
+    this.code = code;
+    this.sqlCode = sqlCode;
 
     Object.setPrototypeOf(this, HttpError.prototype);
     Error.captureStackTrace(this, this.constructor);
