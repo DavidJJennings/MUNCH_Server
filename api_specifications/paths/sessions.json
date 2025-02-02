@@ -1,0 +1,20 @@
+{
+  "paths": {
+    "/sessions": {
+      "post": {
+        "description": "Authenticates a user and if successful returns a JWT (1 hour)",
+        "operationId": "login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/loginRequest"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

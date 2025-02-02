@@ -31,6 +31,8 @@ app.use(
 
 app.use(`/${process.env.API_VERSION}/users`, userRoute);
 
+app.use(`/${process.env.API_VERSION}/users`, userRoute)
+
 app.use((err: HttpError, req, res, next) => {
   logger.error(`[${req.method}] ${req.url} - ${err.sqlCode || err.code}: ${err.message}`);
   
